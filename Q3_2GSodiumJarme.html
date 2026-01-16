@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
+            background-color: #f2f2f2;
         }
 
         form {
@@ -22,8 +22,8 @@
         fieldset {
             margin-bottom: 20px;
             padding: 15px;
-            border-radius: 6px;
             border: 1px solid #999;
+            border-radius: 6px;
         }
 
         legend {
@@ -44,8 +44,8 @@
         }
 
         input:focus, select:focus, textarea:focus {
-            background-color: #e6f2ff;
-            border: 2px solid #0077cc;
+            background-color: #e6f0ff;
+            border: 2px solid #0066cc;
             outline: none;
         }
 
@@ -67,11 +67,11 @@
 
     <script>
         function confirmSubmit() {
-            return confirm("Are you sure you want to submit this application?");
+            return confirm("Do you want to submit this application?");
         }
 
         function confirmReset() {
-            return confirm("Are you sure you want to reset the form?");
+            return confirm("Do you want to reset all entered information?");
         }
 
         function checkEmpty(element) {
@@ -113,42 +113,42 @@
     </fieldset>
 
     <fieldset>
-        <legend>Organization Details</legend>
+        <legend>Organization Information</legend>
 
         <label>
             Mobile Phone:
-            <input type="text" name="mobile" required onblur="checkEmpty(this)">
+            <input type="text" name="mobile_phone" required onblur="checkEmpty(this)">
         </label>
 
         <label>
             Grade Level:
             <select name="grade_level" required>
-                <option value="">-- Select Grade --</option>
-                <option value="g7">Grade 7</option>
-                <option value="g8">Grade 8</option>
-                <option value="g9">Grade 9</option>
-                <option value="g10">Grade 10</option>
-                <option value="g11">Grade 11</option>
-                <option value="g12">Grade 12</option>
+                <option value="">Select Grade</option>
+                <option value="lvl7">Grade 7</option>
+                <option value="lvl8">Grade 8</option>
+                <option value="lvl9">Grade 9</option>
+                <option value="lvl10">Grade 10</option>
+                <option value="lvl11">Grade 11</option>
+                <option value="lvl12">Grade 12</option>
             </select>
         </label>
 
         <label>
             Intern / Extern:
             <br>
-            <input type="radio" name="status" value="internal" required> Intern
-            <input type="radio" name="status" value="external" required> Extern
+            <input type="radio" name="status" value="int" required> Intern
+            <input type="radio" name="status" value="ext" required> Extern
         </label>
 
         <label>
             Preferred Organization / Club:
             <select name="club" required>
-                <option value="">-- Select Club --</option>
+                <option value="">Select Organization</option>
                 <option value="tech">Technology Club</option>
-                <option value="arts">Arts Society</option>
-                <option value="sports">Sports Association</option>
-                <option value="science">Science Guild</option>
-                <option value="music">Music Ensemble</option>
+                <option value="arts">Arts Club</option>
+                <option value="sports">Sports Club</option>
+                <option value="science">Science Club</option>
+                <option value="music">Music Club</option>
             </select>
         </label>
 
