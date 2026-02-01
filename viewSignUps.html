@@ -2,97 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>View Club Sign-Ups</title>
+<title>View Sign-Ups</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-}
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-th, td {
-  border: 1px solid #999;
-  padding: 8px;
-  text-align: left;
-}
-th {
-  background: #ddd;
-}
-.message {
-  font-style: italic;
-  margin-top: 10px;
-}
+body { font-family: Arial, sans-serif; padding:20px; }
+table { width:100%; border-collapse:collapse; }
+th, td { border:1px solid #999; padding:8px; }
+th { background:#ddd; }
 </style>
-
-<script>
-const STORAGE_KEY = "clubSignUps";
-
-function loadSignUps() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return raw ? JSON.parse(raw) : [];
-}
-
-function renderTable(filterClub = "ALL") {
-  const data = loadSignUps();
-  const tbody = document.getElementById("tbody");
-  const total = document.getElementById("total");
-  tbody.innerHTML = "";
-
-  if (data.length === 0) {
-    total.textContent = "No sign-ups saved.";
-    return;
-  }
-
-  const filtered = filterClub === "ALL"
-    ? data
-    : data.filter(s => s.club === filterClub);
-
-  if (filtered.length === 0) {
-    total.textContent = "No sign-ups for selected club.";
-    return;
-  }
-
-  filtered.forEach(s => {
-    tbody.innerHTML += `
-      <tr>
-        <td>${s.studentId}</td>
-        <td>${s.fullName}</td>
-        <td>${s.grade}</td>
-        <td>${s.club}</td>
-        <td>${s.status}</td>
-      </tr>
-    `;
-  });
-
-  total.textContent = "Total Sign-Ups: " + filtered.length;
-}
-
-function clubChanged() {
-  const club = document.getElementById("clubFilter").value;
-  renderTable(club);
-}
-
-window.onload = () => renderTable();
-</script>
 </head>
 
 <body>
 
 <h2>Club Sign-Ups</h2>
 
-<label>Filter by Club:
-  <select id="clubFilter" onchange="clubChanged()">
-    <option value="ALL">ALL</option>
-    <option>Technology Club</option>
-    <option>Arts Club</option>
-    <option>Sports Club</option>
-    <option>Science Club</option>
-    <option>Music Club</option>
-  </select>
-</label>
+<select id="filter">
+  <option value="ALL">ALL</option>
+  <option>Technology Club</option>
+  <option>Arts Club</option>
+  <option>Sports Club</option>
+  <option>Science Club</option>
+  <option>Music Club</option>
+</select>
 
 <table>
 <thead>
@@ -101,17 +32,59 @@ window.onload = () => renderTable();
   <th>Name</th>
   <th>Grade</th>
   <th>Club</th>
-  <th>Status</th>
 </tr>
 </thead>
-<tbody id="tbody"></tbody>
+<tbody id="rows"></tbody>
 </table>
 
-<p id="total" class="message"></p>
+<p id="total"></p>
 
-<a href="Q3_2GSodiumJarme.html">← Back to Sign-Up Page</a>
+<a href="Q3_2GSodiumJarme.html">← Back</a>
+
+<script>
+const KEY = "clubSignUps";
+
+function loadData() {
+  const raw = localStorage.getItem(KEY);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function render() {
+  const rows = document.getElementById("rows");
+  const total = document.getElementById("total");
+  const filter = document.getElementById("filter").value;
+
+  const data = loadData();
+  rows.innerHTML = "";
+
+  const list = filter === "ALL" ? data : data.filter(d => d.club === filter);
+
+  if (data.length === 0) {
+    total.textContent = "No sign-ups saved.";
+    return;
+  }
+
+  if (list.length === 0) {
+    total.textContent = "No sign-ups for selected club.";
+    return;
+  }
+
+  list.forEach(d => {
+    rows.innerHTML += `
+      <tr>
+        <td>${d.studentId}</td>
+        <td>${d.name}</td>
+        <td>${d.grade}</td>
+        <td>${d.club}</td>
+      </tr>`;
+  });
+
+  total.textContent = "Total Sign-Ups: " + list.length;
+}
+
+document.getElementById("filter").onchange = render;
+render();
+</script>
 
 </body>
 </html>
-
-
