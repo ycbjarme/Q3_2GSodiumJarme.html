@@ -5,109 +5,33 @@
 <title>Centralized Club Application</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
-}
+body { font-family: Arial, sans-serif; background:#f2f2f2; }
 form {
-  width: 600px;
-  margin: 30px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  width:600px; margin:30px auto; background:#fff;
+  padding:20px; border-radius:8px;
 }
-fieldset {
-  margin-bottom: 15px;
-}
-.invalid {
-  border: 2px solid red;
-}
-.buttons {
-  text-align: center;
-}
-button {
-  padding: 8px 15px;
-  margin: 5px;
-}
+fieldset { margin-bottom:15px; }
+button { padding:8px 15px; margin:5px; }
 </style>
-
-<script>
-const STORAGE_KEY = "clubSignUps";
-
-/* Load existing sign-ups or initialize empty array */
-function loadSignUps() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return raw ? JSON.parse(raw) : [];
-}
-
-/* Save sign-ups back to localStorage */
-function saveSignUps(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-/* Form submission handler */
-function submitForm(event) {
-  event.preventDefault();
-
-  if (!confirm("Do you want to submit this application?")) return;
-
-  const form = event.target;
-
-  const signUp = {
-    studentId: form.student_id.value,
-    fullName: form.full_name.value,
-    birthday: form.birthday.value,
-    email: form.email.value,
-    phone: form.mobile_phone.value,
-    grade: form.grade_level.value,
-    status: form.status.value,
-    club: form.club.value,
-    reason: form.reason.value,
-    time: new Date().toLocaleString()
-  };
-
-  const signUps = loadSignUps();
-  signUps.push(signUp);          // grow array
-  saveSignUps(signUps);          // persist to localStorage
-
-  alert("Application saved successfully!");
-  form.reset();
-}
-</script>
 </head>
 
 <body>
 
-<form onsubmit="submitForm(event)">
+<form id="clubForm">
   <fieldset>
     <legend>Personal Information</legend>
-
-    <label>Student ID:
-      <input type="number" name="student_id" required>
-    </label>
-
-    <label>Full Name:
-      <input type="text" name="full_name" required>
-    </label>
-
-    <label>Birthday:
-      <input type="date" name="birthday" required>
-    </label>
-
-    <label>Email:
-      <input type="email" name="email" required>
-    </label>
+    <label>Student ID <input type="number" name="student_id" required></label><br>
+    <label>Full Name <input type="text" name="full_name" required></label><br>
+    <label>Birthday <input type="date" name="birthday" required></label><br>
+    <label>Email <input type="email" name="email" required></label>
   </fieldset>
 
   <fieldset>
     <legend>Organization Information</legend>
+    <label>Phone <input type="text" name="phone" required></label><br>
 
-    <label>Mobile Phone:
-      <input type="text" name="mobile_phone" required>
-    </label>
-
-    <label>Grade Level:
-      <select name="grade_level" required>
+    <label>Grade
+      <select name="grade" required>
         <option value="">Select</option>
         <option>Grade 7</option>
         <option>Grade 8</option>
@@ -116,14 +40,14 @@ function submitForm(event) {
         <option>Grade 11</option>
         <option>Grade 12</option>
       </select>
-    </label>
+    </label><br>
 
     <label>
       <input type="radio" name="status" value="Intern" required> Intern
       <input type="radio" name="status" value="Extern" required> Extern
-    </label>
+    </label><br>
 
-    <label>Preferred Club:
+    <label>Club
       <select name="club" required>
         <option value="">Select</option>
         <option>Technology Club</option>
@@ -132,20 +56,60 @@ function submitForm(event) {
         <option>Science Club</option>
         <option>Music Club</option>
       </select>
-    </label>
+    </label><br>
 
-    <label>Reason:
+    <label>Reason<br>
       <textarea name="reason" required></textarea>
     </label>
   </fieldset>
 
-  <div class="buttons">
-    <button type="submit">Submit</button>
-    <button type="button" onclick="location.href='viewSignUps.html'">
-      View Sign-Ups
-    </button>
-  </div>
+  <button type="submit">Submit</button>
+  <button type="button" onclick="location.href='viewSignUps.html'">View Sign-Ups</button>
 </form>
+
+<script>
+const KEY = "clubSignUps";
+
+/* read saved sign-ups */
+function loadData() {
+  const raw = localStorage.getItem(KEY);
+  return raw ? JSON.parse(raw) : [];
+}
+
+/* save sign-ups */
+function saveData(data) {
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+
+/* form handler */
+document.getElementById("clubForm").onsubmit = function(e) {
+  e.preventDefault();
+
+  if (!confirm("Submit application?")) return;
+
+  const f = e.target;
+
+  const obj = {
+    id: Date.now(),
+    studentId: f.student_id.value,
+    name: f.full_name.value,
+    birthday: f.birthday.value,
+    email: f.email.value,
+    phone: f.phone.value,
+    grade: f.grade.value,
+    status: f.status.value,
+    club: f.club.value,
+    reason: f.reason.value
+  };
+
+  const data = loadData();
+  data.push(obj);
+  saveData(data);
+
+  alert("Saved!");
+  f.reset();
+};
+</script>
 
 </body>
 </html>
