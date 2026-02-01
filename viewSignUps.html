@@ -10,20 +10,22 @@ table { width:100%; border-collapse:collapse; }
 th, td { border:1px solid #999; padding:8px; }
 th { background:#ddd; }
 </style>
-</head>
 
+</head>
 <body>
 
 <h2>Club Sign-Ups</h2>
 
-<select id="filter">
-  <option value="ALL">ALL</option>
-  <option>Technology Club</option>
-  <option>Arts Club</option>
-  <option>Sports Club</option>
-  <option>Science Club</option>
-  <option>Music Club</option>
-</select>
+<label>Filter by Club:
+  <select id="filter">
+    <option value="ALL">ALL</option>
+    <option>Technology Club</option>
+    <option>Arts Club</option>
+    <option>Sports Club</option>
+    <option>Science Club</option>
+    <option>Music Club</option>
+  </select>
+</label>
 
 <table>
 <thead>
@@ -39,7 +41,7 @@ th { background:#ddd; }
 
 <p id="total"></p>
 
-<a href="Q3_2GSodiumJarme.html">← Back</a>
+<a href="index.html">← Back</a>
 
 <script>
 const KEY = "clubSignUps";
