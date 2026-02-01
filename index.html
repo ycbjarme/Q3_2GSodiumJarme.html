@@ -70,18 +70,18 @@ button { padding:8px 15px; margin:5px; }
 <script>
 const KEY = "clubSignUps";
 
-/* read saved sign-ups */
+
 function loadData() {
   const raw = localStorage.getItem(KEY);
   return raw ? JSON.parse(raw) : [];
 }
 
-/* save sign-ups */
+
 function saveData(data) {
   localStorage.setItem(KEY, JSON.stringify(data));
 }
 
-/* form handler */
+
 document.getElementById("clubForm").onsubmit = function(e) {
   e.preventDefault();
 
