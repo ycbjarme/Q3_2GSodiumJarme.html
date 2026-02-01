@@ -35,7 +35,7 @@ button { padding:4px 8px; }
   <th>Name</th>
   <th>Grade</th>
   <th>Club</th>
-  <th>Action</th> <!-- DELETE COLUMN -->
+  <th>Action</th> 
 </tr>
 </thead>
 <tbody id="rows"></tbody>
@@ -48,13 +48,13 @@ button { padding:4px 8px; }
 <script>
 const KEY = "clubSignUps";
 
-// Load all sign-ups from localStorage
+
 function loadData() {
   const raw = localStorage.getItem(KEY);
   return raw ? JSON.parse(raw) : [];
 }
 
-// Render table rows and total
+
 function render() {
   const rows = document.getElementById("rows");
   const total = document.getElementById("total");
@@ -89,32 +89,31 @@ function render() {
   total.textContent = "Total Sign-Ups: " + list.length;
 }
 
-// Filter dropdown change
+
 document.getElementById("filter").onchange = render;
 
-// Delete button functionality
 document.getElementById("rows").onclick = function(e) {
   if (e.target.tagName === "BUTTON") {
     const idx = Number(e.target.dataset.index);
     let data = loadData();
     const filter = document.getElementById("filter").value;
 
-    // Get filtered list to find actual object
+    
     const list = filter === "ALL" ? data : data.filter(d => d.club === filter);
     const item = list[idx];
 
-    // Find real index in full data
+   
     const realIndex = data.findIndex(d => d.id === item.id);
 
     if (realIndex !== -1) {
-      data.splice(realIndex, 1); // remove item
-      localStorage.setItem(KEY, JSON.stringify(data)); // save
-      render(); // refresh table
+      data.splice(realIndex, 1); 
+      localStorage.setItem(KEY, JSON.stringify(data)); 
+      render(); 
     }
   }
 };
 
-// Initial render on page load
+
 render();
 </script>
 
