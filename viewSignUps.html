@@ -4,24 +4,24 @@
 <meta charset="UTF-8">
 <title>View Sign-Ups</title>
 <style>
-  body { font-family: Arial, sans-serif; padding:20px; background: #fafafa; }
+  body { font-family: Arial, sans-serif; padding:20px; background: #f9f9f9; }
   table { width:100%; border-collapse:collapse; margin-top:15px; background: white; }
   th, td { border:1px solid #999; padding:10px; text-align:center; }
-  th { background:#4CAF50; color: white; }
-  .filter-container { background: #eee; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-  #total { font-weight: bold; font-size: 1.2em; color: #2c3e50; }
-  .delete-btn { color: white; background: #e74c3c; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
-  .back-link { display: inline-block; margin-top: 20px; text-decoration: none; color: #008CBA; font-weight: bold; }
+  th { background:#008CBA; color: white; }
+  .filter-section { margin-bottom: 20px; background: #eee; padding: 15px; border-radius: 5px; }
+  #total { font-weight: bold; font-size: 1.1em; color: #333; margin-top: 10px; }
+  .del-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; }
+  .back-link { display: inline-block; margin-top: 20px; text-decoration: none; color: #008CBA; }
 </style>
 </head>
 <body>
 
 <h2>Club Sign-Ups Dashboard</h2>
 
-<div class="filter-container">
+<div class="filter-section">
   <label><strong>Filter by Club:</strong> 
     <select id="filter">
-      <option value="ALL">Display All Clubs</option>
+      <option value="ALL">Show All Clubs</option>
       <option>Bake Club</option><option>Kislap</option>
       <option>Karyo</option><option>Alianti</option><option>Exposure</option>
     </select>
@@ -48,73 +48,78 @@
 <script>
 const KEY = "clubSignUps";
 
-
+/**
+ * Fetches the saved data array from localStorage.
+ */
 function loadData() {
   const raw = localStorage.getItem(KEY);
   return raw ? JSON.parse(raw) : [];
 }
 
-
+/**
+ * Renders the data table and applies filtering and counting logic.
+ */
 function render() {
   const rows = document.getElementById("rows");
-  const total = document.getElementById("total");
+  const totalDisplay = document.getElementById("total");
   const filterValue = document.getElementById("filter").value;
 
   const data = loadData();
   rows.innerHTML = "";
 
+  /**
+   * Filter logic: If 'ALL' is selected, use the full dataset.
+   * Otherwise, filter the array for entries matching the selected club.
+   */
+  const filteredList = filterValue === "ALL" 
+    ? data 
+    : data.filter(item => item.club === filterValue);
 
-  const list = filterValue === "ALL" ? data : data.filter(d => d.club === filterValue);
-
+  // Requirement: Display appropriate messages for empty states.
   if (data.length === 0) {
-    total.textContent = "Database is currently empty.";
+    totalDisplay.textContent = "No sign-ups currently saved.";
     return;
   }
 
-  if (list.length === 0) {
-    total.textContent = `No applications found for ${filterValue}.`;
+  if (filteredList.length === 0) {
+    totalDisplay.textContent = `No applications found for ${filterValue}.`;
     return;
   }
 
-
-  list.forEach((d, index) => {
+  // Generate table rows dynamically based on the filtered list.
+  filteredList.forEach((student) => {
     rows.innerHTML += `
       <tr>
-        <td>${d.studentId}</td>
-        <td>${d.name}</td>
-        <td>${d.grade}</td>
-        <td>${d.club}</td>
-        <td><button class="delete-btn" data-id="${d.id}">Remove</button></td>
+        <td>${student.studentId}</td>
+        <td>${student.name}</td>
+        <td>${student.grade}</td>
+        <td>${student.club}</td>
+        <td><button class="del-btn" onclick="deleteEntry(${student.id})">Delete</button></td>
       </tr>`;
   });
 
-
-  total.textContent = "Total Sign-Ups Displayed: " + list.length;
+  // Requirement: Correct Total Sign-ups for both unfiltered and filtered views.
+  totalDisplay.textContent = "Total Sign-Ups Displayed: " + filteredList.length;
 }
 
+/**
+ * Handles individual record deletion.
+ * Searches the original array for the unique timestamp ID to remove the correct item.
+ */
+function deleteEntry(id) {
+  if (!confirm("Remove this application?")) return;
 
+  let data = loadData();
+  // Filter out the item matching the unique ID and save the new array.
+  data = data.filter(item => item.id !== id);
+  localStorage.setItem(KEY, JSON.stringify(data));
+  render(); // Refresh the table and count display.
+}
+
+// Event Listener for the filter dropdown.
 document.getElementById("filter").onchange = render;
 
-
-document.getElementById("rows").onclick = function(e) {
-  if (e.target.tagName === "BUTTON") {
-    if (!confirm("Are you sure you want to delete this record?")) return;
-    
-    const targetId = Number(e.target.dataset.id);
-    let data = loadData();
-
-
-    const realIndex = data.findIndex(item => item.id === targetId);
-
-    if (realIndex !== -1) {
-      data.splice(realIndex, 1); // Remove the item
-      localStorage.setItem(KEY, JSON.stringify(data)); // Sync back to storage
-      render(); // Refresh the view
-    }
-  }
-};
-
-
+// Initial render call when page loads.
 render();
 </script>
 </body>
