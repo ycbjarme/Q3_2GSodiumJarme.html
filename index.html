@@ -58,13 +58,19 @@
 <script>
 const KEY = "clubSignUps";
 
-
+/**
+ * Retrieves the application list from localStorage.
+ * Converts the JSON string back into a JavaScript array.
+ */
 function loadData() {
   const raw = localStorage.getItem(KEY);
   return raw ? JSON.parse(raw) : [];
 }
 
-
+/**
+ * Persists the application array to localStorage.
+ * Converts the array into a JSON string for storage.
+ */
 function saveData(data) {
   localStorage.setItem(KEY, JSON.stringify(data));
 }
@@ -75,8 +81,10 @@ document.getElementById("clubForm").onsubmit = function(e) {
 
   const f = e.target;
   
+  // Creates a data object representing the student's submission.
+  // Date.now() provides a unique identifier for secure deletion later.
   const obj = {
-    id: Date.now(), // Unique ID for safe deletion later
+    id: Date.now(), 
     studentId: f.student_id.value,
     name: f.full_name.value,
     birthday: f.birthday.value,
@@ -88,6 +96,7 @@ document.getElementById("clubForm").onsubmit = function(e) {
     reason: f.reason.value
   };
 
+  // Pull existing data, add the new entry, and save back to storage.
   const data = loadData();
   data.push(obj);
   saveData(data);
@@ -96,7 +105,5 @@ document.getElementById("clubForm").onsubmit = function(e) {
   f.reset();
 };
 </script>
-</body>
-</html>
 </body>
 </html>
